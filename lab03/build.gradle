@@ -3,7 +3,7 @@ apply plugin: 'application'
 
 buildscript {
     repositories {
-        flatDir dirs: '/proguard6.0beta2/lib'
+        flatDir dirs: '../../proguard6.0beta2/lib'
     }
     dependencies {
         classpath ':proguard:'
