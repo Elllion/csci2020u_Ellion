@@ -46,7 +46,6 @@ public class WordCounter {
                 //Keep track of if the word has appeared in the email already
                 TreeMap<String, Boolean> fileHasWord = new TreeMap<>();
 
-                System.out.println("Opening File " + f.getName() + "...");
                 if (f.exists()) {
                     Scanner scanner = new Scanner(f);
                     //Read up to a whitespace character
@@ -55,12 +54,11 @@ public class WordCounter {
                     //Read every word. Only add words the first time they appear
                     while (scanner.hasNext()) {
                         String word = scanner.next();
-                        if (isWord(word) && !fileHasWord.containsKey(word)) {
+                        if (isWord(word)){// && !fileHasWord.containsKey(word)) {
                             countWord(word);
                             fileHasWord.put(word, true);
                         }
                     }
-                    System.out.println("Done");
                 }
             }
             //Make sure the directory is valid
@@ -73,7 +71,6 @@ public class WordCounter {
         //Keep track of if the word has appeared in the email already
         TreeMap<String, Boolean> fileHasWord = new TreeMap<>();
 
-        System.out.println("Opening File " + file.getName() + "...");
         if (file.exists()) {
             Scanner scanner = new Scanner(file);
             //Read up to a whitespace character
@@ -87,7 +84,6 @@ public class WordCounter {
                     fileHasWord.put(word, true);
                 }
             }
-            System.out.println("Done");
         }
     }
 
