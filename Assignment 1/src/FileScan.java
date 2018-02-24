@@ -1,17 +1,22 @@
+import java.text.DecimalFormat;
+
 public class FileScan {
     private String fileName;
     private String fileType;
+    private String fileGuess;
     private float  spamProb;
 
     public FileScan(){
         setFileName("null");
         setFileType("null");
+        setFileGuess("null");
         setSpamProb(0);
     }
 
-    public FileScan(String fn, String ft, float sp){
+    public FileScan(String fn, String ft, String fg, float sp){
         setFileName(fn);
         setFileType(ft);
+        setFileGuess(fg);
         setSpamProb(sp);
     }
 
@@ -33,10 +38,20 @@ public class FileScan {
     }
 
     public float getSpamProb() {
-        return spamProb;
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        return Float.parseFloat(df.format(spamProb));
     }
 
     public void setSpamProb(float spamProb) {
         this.spamProb = spamProb;
+    }
+
+    public String getFileGuess() {
+        return fileGuess;
+    }
+
+    public void setFileGuess(String fileGuess) {
+        this.fileGuess = fileGuess;
     }
 }

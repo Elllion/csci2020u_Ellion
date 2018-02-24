@@ -31,6 +31,9 @@ public class WordCounter {
         return 0;
     }
 
+    public int getSize(){
+        return map.size();
+    }
     //Check if the word provided is a word and not email data
     private boolean isWord(String word){
         String pattern = "^[a-zA-Z]+$";
@@ -39,26 +42,14 @@ public class WordCounter {
 
     //Read every file in the provided directory
     public void train(File file)throws IOException{
+
         File[] listOfFiles = file.listFiles();
 
         try {
             for (File f : listOfFiles) {
-                //Keep track of if the word has appeared in the email already
-                TreeMap<String, Boolean> fileHasWord = new TreeMap<>();
-
+               //Send to the file reader function
                 if (f.exists()) {
-                    Scanner scanner = new Scanner(f);
-                    //Read up to a whitespace character
-                    scanner.useDelimiter("\\s");
-
-                    //Read every word. Only add words the first time they appear
-                    while (scanner.hasNext()) {
-                        String word = scanner.next();
-                        if (isWord(word)){// && !fileHasWord.containsKey(word)) {
-                            countWord(word);
-                            fileHasWord.put(word, true);
-                        }
-                    }
+                   update(f);
                 }
             }
             //Make sure the directory is valid
@@ -68,37 +59,20 @@ public class WordCounter {
     }
 
     public void update(File file) throws IOException{
-        //Keep track of if the word has appeared in the email already
-        TreeMap<String, Boolean> fileHasWord = new TreeMap<>();
 
         if (file.exists()) {
             Scanner scanner = new Scanner(file);
             //Read up to a whitespace character
             scanner.useDelimiter("\\s");
 
-            //Read every word. Only add words the first time they appear
+            //Read until scanner is empty
             while (scanner.hasNext()) {
                 String word = scanner.next();
-                if (isWord(word) && !fileHasWord.containsKey(word)) {
+                //Update
+                if (isWord(word)){
                     countWord(word);
-                    fileHasWord.put(word, true);
                 }
             }
-        }
-    }
-
-
-    //Print out the number of files that had each word
-    public void printMap(){
-        for(Map.Entry<String, Integer> entry : map.entrySet()){
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
-    }
-
-    //Print the frequency of each word appearing (Number of files/Total files)
-    public void printFrequency(){
-        for(Map.Entry<String, Integer> entry : map.entrySet()){
-            System.out.println(entry.getKey() + ": " + (entry.getValue()/(map.size() * 1.0f)));
         }
     }
 }
