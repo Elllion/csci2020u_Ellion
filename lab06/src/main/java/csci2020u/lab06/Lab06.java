@@ -55,7 +55,7 @@ private static Color[] pieColours = {
         canvas.setWidth(800);
 
         root.getChildren().add(canvas);
-        primaryStage.setTitle("UI Demo - 2D Graphics");
+        primaryStage.setTitle("Lab 06");
         primaryStage.setScene(scene);
         primaryStage.show();
 

@@ -1,0 +1,12 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+repositories{
+mavenCentral()
+}
+
+dependencies{
+	compile "commons-validator:commons-validator:1.6"
+}
+
+mainClassName = 'csci2020u.Lab07'
