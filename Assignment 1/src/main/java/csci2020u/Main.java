@@ -1,3 +1,4 @@
+package  main.java.csci2020u;
 import javafx.scene.*;
 import javafx.stage.Stage;
 import javafx.application.Application;
@@ -16,22 +17,26 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.net.*;
 
+
 public class Main extends Application{
 
     private static ObservableList<FileScan> scanResults = FXCollections.observableArrayList();
 
     //If a file's spam probability is over this number, it is considered spam
-    private static float spamThreshold = 0.05f;
+    private static float spamThreshold = 0.3f;
+
+    WordCounter trainHamFreq = new WordCounter(), trainSpamFreq = new WordCounter();
 
     public void start(Stage primaryStage) throws Exception{
 
-        WordCounter trainHamFreq = new WordCounter(), trainSpamFreq = new WordCounter();
+
 
         primaryStage.setTitle("Spam Filter V1.0.0.5");
 
         BorderPane layout;
+		
+		//Create a table for individual file data
         TableView<FileScan> table;
-
 
         table = new TableView<>();
         table.setItems(scanResults);
@@ -58,17 +63,14 @@ public class Main extends Application{
         table.getColumns().add(columnGuess);
         table.getColumns().add(columnProb);
 
-
-
-
-
+		//Grid for user input
         GridPane editArea = new GridPane();
         editArea.setPadding(new Insets(10,10,10,10));
         editArea.setVgap(10);
         editArea.setHgap(10);
 
         Label lblPath = new Label("Filepath:");
-        Label lblStatus = new Label("Please enter the filepath...");
+        Label lblStatus = new Label("Please enter the path to the 'data' folder (Relative or Absolute)");
         Label lblAcc = new Label("Accuracy: ");
         Label lblPrc = new Label("Precision: ");
         TextField txtPath = new TextField();
@@ -79,10 +81,16 @@ public class Main extends Application{
         scanDir.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                int truePositives = 0;
-                int trueNegatives = 0;
-                int falsePositives = 0;
-                int guesses = 0;
+				
+				//Reset frequency maps so they are unaffected by old data
+				trainSpamFreq = new WordCounter();
+				trainHamFreq = new WordCounter();
+				
+                float truePositives = 0;
+                float trueNegatives = 0;
+                float falsePositives = 0;
+                float guesses = 0;
+				
                 //Main Directory is whatever the user inputs
                String userInput = txtPath.getText();
 
@@ -113,11 +121,13 @@ public class Main extends Application{
 
                 }
 
+				System.out.println(truePositives);
+				System.out.println(falsePositives);
                 DecimalFormat df = new DecimalFormat();
                 df.setMaximumFractionDigits(2);
                 //Update Accuracy/Precision values
-                lblAcc.setText("Accuracy: " + df.format(((truePositives + trueNegatives) / (guesses * 1.0f) * 100.0f)) + "%");
-                lblPrc.setText("Precision: " + df.format(((truePositives * 1.0f) / (falsePositives + truePositives) * 100.0f)) + "%");
+                lblAcc.setText("Accuracy: " + df.format(((truePositives + trueNegatives) / (guesses) * 100.0f)) + "%");
+                lblPrc.setText("Precision: " + df.format(((truePositives) / (falsePositives + truePositives) * 100.0f)) + "%");
             }
         });
 
@@ -209,7 +219,7 @@ public class Main extends Application{
                             it is safe to assume that the new word will appear in other spam files as well.
                             Otherwise the file is treated as ham and used to update the ham frequency map
 
-                            The training folder has ~5x more ham mail than spam mail.
+                            With the sample data provided, there are ~5x more training ham files than training spam files
                             The lack of spam data results in quite a few spams being falsely marked as hams.
                             To compensate, a frequency map will only be updated if its counterpart is larger.
                             This helps prevent false positives and true negatives from messing with a weak frequency map,

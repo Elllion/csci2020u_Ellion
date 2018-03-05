@@ -1,3 +1,5 @@
+package  main.java.csci2020u;
+
 import java.text.DecimalFormat;
 
 public class FileScan {
